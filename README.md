@@ -10,7 +10,6 @@ Um eine Vorhersage für eine Stunde für einen von 11 Parkplätzen in Paderbonn 
 <pre><code>-------------------------------------------------------------------------------
 Language                     files          blank        comment           code
 -------------------------------------------------------------------------------
-CSV                             14              0              0         136705
 Jupyter Notebook                 6              0            192           1286
 Python                           2            381            125            767
 Markdown                         1              0              0              3
