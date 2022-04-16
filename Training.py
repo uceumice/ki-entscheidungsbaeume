@@ -1,33 +1,34 @@
 #TRAININGSPROZESS + PRUNNING
 
 from PyTree import ClassificationTree as ct
+from PyTree.ClassificationTree import DecisionTree
 import pandas as pd
 import pickle
- 
+
 data = pd.read_csv("DATENSATZ.csv",sep=",")
 parkplaetze = data.iloc[:,1:12].columns
 
 parkplaetze_limits = {
-        'P1AK': lambda x: x/640,
-        'P2AK': lambda x: x/540,
-        'P3AK': lambda x: x/540,
-        'P41AK': lambda x: x/670,
-        'P42AK': lambda x: x/670,
-        'P5AK': lambda x: x/500,
-        'P61AK': lambda x: x/290,
-        'P62AK': lambda x: x/290,
-        'P63AK': lambda x: x/290,
-        'P7AK': lambda x: x/290,
-        'P8AK': lambda x: x/160
+        'P1AK': 640,
+        'P2AK': 540,
+        'P3AK': 540,
+        'P41AK': 670,
+        'P42AK': 670,
+        'P5AK': 500,
+        'P61AK': 290,
+        'P62AK': 290,
+        'P63AK': 290,
+        'P7AK': 290,
+        'P8AK': 160
     }
 
 def quantity_to_procent(parkplatz):
-    return parkplaetze_limits[parkplatz]
-
+    return lambda x: x/parkplaetze_limits[parkplatz]
 
 """
 DATA -> NUR WETTERDATEN
 """
+
 def data_train_test_W(parkplatz_name: str):
     data = pd.read_csv("DATENSATZ.csv",sep=",")
     # Zielspalten aussuchen
@@ -120,7 +121,7 @@ def load_from_pkl(filename: str):
         filename+=".pkl"
         
     with open(filename, 'rb') as inp:
-        return pickle.load(inp)
+        return pickle.load(inp)    
 
 def save_to_tree(filename: str, tree: ct.DecisionTree):
     tree.export(filename=parkplaetze[0])
@@ -175,7 +176,7 @@ class Training():
                           mode,
                           limit_training_data,
                           )
-        self.tree: ct.DecisionTree = t
+        self.tree: DecisionTree = t
         self.data_train = trs
         self.data_test = tes
         self.parkplatz_index = parkplatz_index

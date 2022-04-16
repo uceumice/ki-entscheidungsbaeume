@@ -4,11 +4,11 @@ import numpy as np
 from random import shuffle
 from math import log
 from graphviz import Digraph
+
 styles = {
     'leaf': {'shape': 'record', 'style': 'filled', 'color': 'deepskyblue3'},
     'crit': {'shape': 'record'},
 }
-
 
 class split:
     #Initialisierung des Splits
@@ -86,8 +86,6 @@ class edge:
         return copy_edge
     
     pass
-
-
 
 def majority_value(data, target):
     try:
@@ -227,10 +225,6 @@ def find_all_splits(data, target):
 
     return list_of_splits
 
-    pass
-
-
-
 def identify_best_split(data, target, list_of_splits, criterion = information_gain):
     
     best_split = None
@@ -246,8 +240,6 @@ def identify_best_split(data, target, list_of_splits, criterion = information_ga
             
     return best_split
     #Output: Most productive split according to information gain
-    pass
-
 
 def apply_split(data, current_split):
     
@@ -364,9 +356,9 @@ class DecisionTree:
 
 
         if (crit == None) or (crit == 'entropy'):
-        	self.criterion = information_gain
+            self.criterion = information_gain
         elif crit == 'misclassification_error':
-        	self.criterion = information_gain_ME
+            self.criterion = information_gain_ME
 
 
 
@@ -532,7 +524,7 @@ class DecisionTree:
 
 
     def get_node_count(self):
-    	return len(self.tree_nodes)
+        return len(self.tree_nodes)
 
     def get_leaf_node_count(self):
         count=0
@@ -557,22 +549,22 @@ class DecisionTree:
 
     def get_max_depth(self, current_depth = 0, max_depth = 0, current_node = None):
 
-    	if current_node == None:
-    		current_node = self.tree_nodes[1]
+        if current_node == None:
+            current_node = self.tree_nodes[1]
 
-    	current_depth+=1
-    	if max_depth < current_depth:
-    		max_depth = current_depth
+        current_depth+=1
+        if max_depth < current_depth:
+            max_depth = current_depth
 
-    	if current_node.node_type == 'leaf':
-    		return max_depth
+        if current_node.node_type == 'leaf':
+            return max_depth
 
-    	else:
-    		for node in current_node.child_nodes:
-    			max_depth = self.get_max_depth(current_depth = current_depth, max_depth = max_depth, current_node = node)
+        else:
+            for node in current_node.child_nodes:
+                max_depth = self.get_max_depth(current_depth = current_depth, max_depth = max_depth, current_node = node)
 
-    	return max_depth
-    	pass
+        return max_depth
+        pass
     
     def get_status(self):
         leaf_node_count = self.get_leaf_node_count()
@@ -690,74 +682,74 @@ class DecisionTree:
         pass  
   
     def evaluate_fairness(self, data, fairness_attribute,detailed = False):
-    	subsets = apply_split(data, split(attribute = fairness_attribute, values = data[fairness_attribute].unique(), split_type='categorical') )
+        subsets = apply_split(data, split(attribute = fairness_attribute, values = data[fairness_attribute].unique(), split_type='categorical') )
 
-    	for i in subsets:
-    		print(i[fairness_attribute].unique()[0])
-    		if detailed:
-    			self.prediction_accuracy(i, detailed = detailed)
-    		else:
-    			print(str(round(self.prediction_accuracy(i, detailed = detailed)*100,1))+'%')  
+        for i in subsets:
+            print(i[fairness_attribute].unique()[0])
+            if detailed:
+                self.prediction_accuracy(i, detailed = detailed)
+            else:
+                print(str(round(self.prediction_accuracy(i, detailed = detailed)*100,1))+'%')  
 
     
     def evaluation_node_count(self, train_data, test_data):
-    	 
-    	node_count= self.get_node_count()
-    	max_depth= self.get_max_depth()
-    	
-    	list_of_trees=[]
+         
+        node_count= self.get_node_count()
+        max_depth= self.get_max_depth()
+        
+        list_of_trees=[]
 
-    	for i in range(1,max_depth+1):
-    		help_tree = self.copy()
-    		help_tree.prune_depth(i)
-    		list_of_trees.append(help_tree)
+        for i in range(1,max_depth+1):
+            help_tree = self.copy()
+            help_tree.prune_depth(i)
+            list_of_trees.append(help_tree)
 
-    	index = []
+        index = []
 
-    	for i in list_of_trees:
-    		index.append(i.get_node_count())
+        for i in list_of_trees:
+            index.append(i.get_node_count())
 
-    	df = pd.DataFrame(index=index) 	
-    	
-    	train_list=[]
-    	for j in list_of_trees:
-    		train_list.append(j.prediction_accuracy(train_data))
-    	df['Train Data'] = train_list
+        df = pd.DataFrame(index=index) 	
+        
+        train_list=[]
+        for j in list_of_trees:
+            train_list.append(j.prediction_accuracy(train_data))
+        df['Train Data'] = train_list
 
-    	test_list=[]
-    	for j in list_of_trees:
-    		test_list.append(j.prediction_accuracy(test_data))
-    	df['Test Data'] = test_list
+        test_list=[]
+        for j in list_of_trees:
+            test_list.append(j.prediction_accuracy(test_data))
+        df['Test Data'] = test_list
 
-    	return df
+        return df
 
     def evaluation_depth(self, train_data, test_data):
-	
-    	node_count= self.get_node_count()
-    	max_depth= self.get_max_depth()
-    	
-    	list_of_trees=[]
+    
+        node_count= self.get_node_count()
+        max_depth= self.get_max_depth()
+        
+        list_of_trees=[]
 
-    	for i in range(1,max_depth+1):
-    		help_tree = self.copy()
-    		help_tree.prune_depth(i)
-    		list_of_trees.append(help_tree)
+        for i in range(1,max_depth+1):
+            help_tree = self.copy()
+            help_tree.prune_depth(i)
+            list_of_trees.append(help_tree)
 
-    	index = range(1,max_depth+1)
+        index = range(1,max_depth+1)
 
-    	df = pd.DataFrame(index=index)
-    	
-    	train_list=[]
-    	for j in list_of_trees:
-    		train_list.append(j.prediction_accuracy(train_data))
-    	df['Train Data'] = train_list
+        df = pd.DataFrame(index=index)
+        
+        train_list=[]
+        for j in list_of_trees:
+            train_list.append(j.prediction_accuracy(train_data))
+        df['Train Data'] = train_list
 
-    	test_list=[]
-    	for j in list_of_trees:
-    		test_list.append(j.prediction_accuracy(test_data))
-    	df['Test Data'] = test_list
+        test_list=[]
+        for j in list_of_trees:
+            test_list.append(j.prediction_accuracy(test_data))
+        df['Test Data'] = test_list
 
-    	return df
+        return df
 
     def prune_node(self, prune_node_nr, prune_node = None):
         
@@ -810,19 +802,19 @@ class DecisionTree:
 
     def prune_depth(self, max_depth, current_depth = 0, current_node = None):
 
-    	if current_node == None:
-    		current_node = self.tree_nodes[1]
+        if current_node == None:
+            current_node = self.tree_nodes[1]
 
-    	current_depth+=1
+        current_depth+=1
 
-    	if current_depth == max_depth:
-    		self.prune_node(current_node.node_nr)
+        if current_depth == max_depth:
+            self.prune_node(current_node.node_nr)
 
-    	else:
-    		for node in current_node.child_nodes:
-    			self.prune_depth(max_depth = max_depth, current_depth = current_depth, current_node = node)
+        else:
+            for node in current_node.child_nodes:
+                self.prune_depth(max_depth = max_depth, current_depth = current_depth, current_node = node)
 
-    	pass
+        pass
 
     def validation_pruning(self, validation_sample, root_node = None):                     #root_nr = 1
         
@@ -1002,9 +994,7 @@ class DecisionTree:
 
         #self.tree_graph.view()
         return self.tree_graph
-        
-        pass
-        
+
     def copy(self, copy_tree = None, current_node = None):
         if copy_tree == None:
             copy_tree = DecisionTree(target = self.target, data = self.data.copy(), target_values = self.target_values.copy())
