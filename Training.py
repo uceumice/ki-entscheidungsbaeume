@@ -3,7 +3,7 @@
 from PyTree import ClassificationTree as ct
 import pandas as pd
 import pickle
-
+ 
 data = pd.read_csv("DATENSATZ.csv",sep=",")
 parkplaetze = data.iloc[:,1:12].columns
 
