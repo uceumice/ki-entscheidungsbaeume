@@ -1,2 +1,8 @@
 # python enviroment
 .venv
+
+# vscode settings
+.vscode
+
+# jupiter cache
+.ipynb_checkpoints
